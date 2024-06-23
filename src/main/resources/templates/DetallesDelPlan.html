@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" th:href="@{/style.css}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalles del Plan</title>
+    <style>
+     
+        body, ul, li {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+      
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+      
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #b5a642;
+            padding: 10px 20px;
+            color: #000; 
+        }
+
+        .nav-left, .nav-right {
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-left li, .nav-right li {
+            margin-right: 20px;
+        }
+
+        .nav-right li {
+            margin-left: auto;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: #000; 
+            font-weight: bold;
+        }
+
+        nav ul li a:hover {
+            background-color: #575757;
+            color: #fff;
+        }
+
+      
+        .content-wrapper {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f5f5f5;
+            padding: 20px 0;
+        }
+
+      
+        .plan-details {
+            display: flex;
+            width: 90%;
+            max-width: 800px;
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            height: 700px; 
+        }
+
+        .plan-image {
+            width: 50%;
+        }
+
+        .plan-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .plan-info {
+            width: 50%;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between; 
+            background-color: #cd7f32; 
+            color: white;
+        }
+
+        .plan-info.plan-plata {
+            background-color: #c0c0c0;
+            color: black;
+        }
+
+        .plan-info.plan-oro {
+            background-color: #ffd700;
+            color: black;
+        }
+
+        .plan-info h2 {
+            margin: 0;
+            margin-bottom: 20px;
+        }
+
+        .plan-info ul {
+            margin: 0;
+            padding: 0;
+            list-style-type: none;
+            flex-grow: 1; 
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .plan-info ul li {
+            margin-bottom: 10px;
+        }
+
+        .plan-info button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            background-color: white;
+            color: #cd7f32; 
+            align-self: center;
+        }
+
+        .plan-info.plan-plata button {
+            color: #c0c0c0;
+        }
+
+        .plan-info.plan-oro button {
+            color: #ffd700;
+        }
+
+       
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+            margin-top: auto;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <ul class="nav-left">
+            <li><a th:href="@{/}">Inicio</a></li>
+        </ul>
+        <ul class="nav-right">
+            <li th:if="${session.usuarioLogueado != null}">
+                <a th:href="@{/user/profile}" th:text="'Bienvenido, ' + ${session.usuarioLogueado.nombre}"></a>
+            </li>
+            <li th:if="${session.usuarioLogueado != null}">
+                <a th:href="@{/logout}">Cerrar Sesión</a>
+            </li>
+        </ul>
+    </nav>
+
+    <div class="content-wrapper">
+        <div class="plan-details">
+            <div class="plan-image">
+                <img src="https://mercadofitness.com/wp-content/uploads/2019/11/Bio-Ritmo-abrio-Tonus-Gym-su-cuarto-micro-gimnasio.jpg" alt="Imagen del Plan" />
+            </div>
+            <div class="plan-info" th:classappend=" 'plan-' + ${plan.toLowerCase()} ">
+                <h2 th:text="'Detalles del Plan ' + ${plan}"></h2>
+                <ul>
+                    <li>Acceso ilimitado al gimnasio</li>
+                    <li>Clases grupales incluidas</li>
+                    <li>Sesiones mensuales con entrenador personal</li>
+                    <li>Descuento en productos de la tienda</li>
+                    <li>Acceso a áreas exclusivas</li>
+                </ul>
+                <form th:action="@{/user/comprar}" method="post">
+                    <input type="hidden" name="plan" th:value="${plan}" />
+                    <button type="submit" th:text="'Comprar Plan ' + ${plan}"></button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    
+    <div th:if="${mensaje != null}">
+        <p th:text="${mensaje}"></p>
+        <div th:if="${nuevaMembresia != null}">
+            <h3>¡Nueva Membresía Adquirida!</h3>
+            <p><strong>ID Membresía:</strong> <span th:text="${nuevaMembresia.idMembresia}"></span></p>
+            <p><strong>Tipo de Membresía:</strong> <span th:text="${nuevaMembresia.tipoMembresia}"></span></p>
+            <p><strong>Fecha de Inicio:</strong> <span th:text="${nuevaMembresia.fechaDeInicio}"></span></p>
+            <p><strong>Fecha de Fin:</strong> <span th:text="${nuevaMembresia.fechaDeFin}"></span></p>
+            <p><strong>Código QR:</strong></p>
+            <img th:src="'data:image/png;base64,' + ${nuevaMembresia.codigoQR}" alt="Código QR de Membresía" />
+        </div>
+    </div>
+</div>
+</div>
+</div>
+
+    <footer>
+        <p>&copy; 2024 Gimnasio. Todos los derechos reservados.</p>
+    </footer>
+</body>
+</html>

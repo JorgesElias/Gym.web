@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   
+    <title>Iniciar Sesión</title>
+</head>
+<body>
+    <nav>
+        <ul class="nav-left">
+            <li><a href="/">Inicio</a></li>
+        </ul>
+        <ul class="nav-right">
+            <li><a href="/login">Iniciar sesión</a></li>
+            <li><a href="/crearcuenta">Crear Cuenta</a></li>
+        </ul>
+    </nav>
+    <div class="login-container">
+        <div class="form-container">
+            <h2>Iniciar Sesión</h2>
+            <form th:action="@{/login}" method="post">
+                <input type="email" name="email" placeholder="Email" required>
+                <input type="password" name="password" placeholder="Contraseña" required>
+                <button type="submit">Ingresar</button>
+            </form>
+            <div th:if="${error}">
+                <p style="color: red;">Credenciales incorrectas, por favor intente de nuevo.</p>
+            </div>
+            <a href="/crearcuenta">Crear una cuenta nueva</a>
+        </div>
+    </div>
+</body>
+</html>

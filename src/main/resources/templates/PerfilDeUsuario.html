@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" th:href="@{/style.css}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil de Usuario</title>
+</head>
+<body>
+    <nav>
+        <ul class="nav-left">
+            <li><a th:href="@{/}">Inicio</a></li>
+        </ul>
+        <ul class="nav-right">
+            <li th:if="${session.usuarioLogueado != null}">
+                <a th:href="@{/user/profile}" th:text="'Bienvenido, ' + ${session.usuarioLogueado.nombre}"></a>
+            </li>
+            <li th:if="${session.usuarioLogueado != null}">
+                <a th:href="@{/logout}">Cerrar Sesión</a>
+            </li>
+        </ul>
+    </nav>
+    <div class="profile-container">
+        <div class="profile-form">
+            <h2>Modificar Perfil de Usuario</h2>
+            <form th:action="@{/user/profile}" method="post">
+                <div class="profile-field">
+                    <label>Nombre:</label>
+                    <input type="text" th:value="${usuario.nombre}" name="nombre" id="nombre" readonly>
+                </div>
+                <div class="profile-field">
+                    <label>Email:</label>
+                    <input type="email" th:value="${usuario.email}" name="email" id="email" readonly>
+                </div>
+                <div class="profile-field password-container">
+                    <label>Contraseña:</label>
+                    <input type="password" id="password" th:value="${usuario.contrasena}" name="contrasena" readonly>
+                    <img th:src="@{/images/view.png}" alt="Ver" class="password-toggle" onclick="togglePassword()">
+                </div>
+                <div class="profile-field">
+                    <button type="button" id="editButton" onclick="enableEditing()">Modificar Datos</button>
+                    <button type="submit" id="saveButton" style="display:none;">Guardar Cambios</button>
+                </div>
+            </form>
+        </div>
+        <div class="membership-info" th:if="${usuario.membresias != null && !usuario.membresias.isEmpty()}">
+            <h3>Membresía</h3>
+            <ul>
+                <li th:each="membresia : ${usuario.membresias}">
+                    <p>Tipo de Membresía: <span th:text="${membresia.tipoMembresia}"></span></p>
+                    <p>Fecha de Inicio: <span th:text="${membresia.fechaDeInicio}"></span></p>
+                    <p>Fecha de Fin: <span th:text="${membresia.fechaDeFin}"></span></p>
+                    <p>ID de Membresía: <span th:text="${membresia.idMembresia}"></span></p>
+                    <p>QR Code:</p>
+                    <img th:src="'data:image/png;base64,' + ${membresia.codigoQR}" alt="QR Code" />
+                </li>
+            </ul>
+        </div>
+    </div>
+    <script>
+        function togglePassword() {
+            var passwordInput = document.getElementById('password');
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+            } else {
+                passwordInput.type = 'password';
+            }
+        }
+
+        function enableEditing() {
+            document.getElementById('nombre').removeAttribute('readonly');
+            document.getElementById('email').removeAttribute('readonly');
+            document.getElementById('password').removeAttribute('readonly');
+            document.getElementById('editButton').style.display = 'none';
+            document.getElementById('saveButton').style.display = 'inline';
+        }
+    </script>
+</body>
+</html>
